@@ -69,7 +69,7 @@ $waifus = query("SELECT * FROM waifus");
                         </td>
                         <td class="px-6 py-4">
                             <a href="">Ubah</a> |
-                            <a href="">Hapus</a>
+                            <a href="destroy.php?id=<?= $waifu["id"] ?>" onclick="return confirm('Yakin ingin menghapus waifu?')">Hapus</a>
                         </td>
                     </tr>
                     <?php $i++ ?>
