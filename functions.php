@@ -122,3 +122,42 @@ function cari($keyword)
             ");
     return query($query);
 }
+
+function register($data)
+{
+    global $connection;
+
+    $email = strtolower(stripslashes($data["email"]));
+    $password = mysqli_real_escape_string($connection, $data["password"]);
+    $confirm = mysqli_real_escape_string($connection, $data["confirm"]);
+
+    // cek apakah email sudah ada 
+    $result = mysqli_query($connection, "SELECT email FROM users WHERE email = '$email'");
+
+    if (mysqli_fetch_assoc($result)){
+        echo "<script>
+            alert('email sudah terdaftar');
+        </script>";
+        return false;
+    }
+
+    // cek konfirmasi
+    if($password !== $confirm){
+        echo "<script>
+            alert ('Konfirmasi password tidak sesuai');
+        </script>";
+        return false;
+    } 
+
+    // enkripsi password 
+    $password = password_hash($password, PASSWORD_DEFAULT);
+
+    // tambahkan user baru ke database 
+    mysqli_query($connection, "INSERT INTO users VALUES(
+        '',
+        '$email',
+        '$password'
+    )");
+
+    return mysqli_affected_rows($connection);
+}
